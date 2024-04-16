@@ -104,7 +104,38 @@ Area : <input type="text" name="area" value="{{area}}"></input>m<sup>2</sup><br/
 </body>
 </html>
 ```
-
+### views.py
+```
+from django.shortcuts import render
+def surfacearea(request):
+    context={}
+    context['area'] = "0"
+    context['r'] = "0"
+    context['h'] = "0"
+    if request.method == 'POST':
+        print("POST method is used")
+        r = request.POST.get('radius','0')
+        h = request.POST.get('height','0')
+        print('request=',request)
+        print('radius=',r)
+        print('height=',h)
+        area = 2 * 3.14 * int(r) * int(h) + 2 * 3.14 * int(r) * int(r)
+        context['area'] = area
+        context['r'] = r
+        context['h'] = h
+        print('Area=',area)
+    return render(request,'mathapp/math.html',context)
+```
+### urls.py
+```
+from django.contrib import admin
+from django.urls import path
+from mathapp import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('surfaceareaofcylinder/',views.surfacearea,name="surfaceareaofcylinder"),
+    path('',views.surfacearea,name="surfaceareaofcylinderroot")]
+```
 ## SERVER SIDE PROCESSING:
 ![output 1](<exp 6(1).png>)
 
